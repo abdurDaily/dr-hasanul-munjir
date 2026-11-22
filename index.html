@@ -33,16 +33,14 @@
   <!-- Self-hosted fonts (latin subset) — preload the ones used above the fold -->
   <link rel="preload" href="assets/fonts/SpaceGrotesk-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Inter-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/InstrumentSerif-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Hero portrait is the largest element: fetch it first -->
   <link rel="preload" as="image" type="image/webp" imagesrcset="assets/images/dr-munjir-hero-480.webp 480w, assets/images/dr-munjir-hero-720.webp 720w, assets/images/dr-munjir-hero-960.webp 960w" imagesizes="(min-width: 992px) 580px, min(420px, 88vw)" fetchpriority="high">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/icons.min.css">
-  <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <!-- Styles: one minified bundle built by tools/build-css.cjs from bootstrap (purged) + icons + style.css + responsive.css.
+       Swiper's CSS is loaded on demand together with Swiper (interactions.js). -->
+  <link rel="stylesheet" href="assets/css/site.min.css">
 
   <!-- Structured data (from the clinic visiting card — update the URL before launch) -->
   <script type="application/ld+json">
@@ -403,8 +401,8 @@
       <div class="col-md-6 gallery__item" data-category="whitening">
         <figure class="ba-card">
           <div class="compare">
-            <img class="compare__after" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=75&auto=format" alt="Demo: brighter smile after professional whitening" loading="lazy">
-            <div class="compare__before"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=75&auto=format" alt="" loading="lazy"></div>
+            <img class="compare__after" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Demo: brighter smile after professional whitening" loading="lazy">
+            <div class="compare__before"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="" loading="lazy"></div>
             <span class="compare__tag compare__tag--before">Before</span><span class="compare__tag compare__tag--after">After</span>
             <span class="compare__handle" aria-hidden="true"><i class="bi bi-chevron-left"></i><i class="bi bi-chevron-right"></i></span>
             <input type="range" class="compare__range" min="0" max="100" value="50" aria-label="Before and after comparison — teeth whitening">
@@ -416,8 +414,8 @@
       <div class="col-md-6 gallery__item" data-category="cosmetic">
         <figure class="ba-card">
           <div class="compare">
-            <img class="compare__after" src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=900&q=75&auto=format" alt="Demo: confident smile after cosmetic bonding" loading="lazy">
-            <div class="compare__before"><img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=900&q=75&auto=format" alt="" loading="lazy"></div>
+            <img class="compare__after" src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Demo: confident smile after cosmetic bonding" loading="lazy">
+            <div class="compare__before"><img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="" loading="lazy"></div>
             <span class="compare__tag compare__tag--before">Before</span><span class="compare__tag compare__tag--after">After</span>
             <span class="compare__handle" aria-hidden="true"><i class="bi bi-chevron-left"></i><i class="bi bi-chevron-right"></i></span>
             <input type="range" class="compare__range" min="0" max="100" value="50" aria-label="Before and after comparison — cosmetic dentistry">
@@ -429,8 +427,8 @@
       <div class="col-md-6 gallery__item" data-category="implants">
         <figure class="ba-card">
           <div class="compare">
-            <img class="compare__after" src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=900&q=75&auto=format" alt="Demo: restored teeth after implant treatment" loading="lazy">
-            <div class="compare__before"><img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=900&q=75&auto=format" alt="" loading="lazy"></div>
+            <img class="compare__after" src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Demo: restored teeth after implant treatment" loading="lazy">
+            <div class="compare__before"><img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="" loading="lazy"></div>
             <span class="compare__tag compare__tag--before">Before</span><span class="compare__tag compare__tag--after">After</span>
             <span class="compare__handle" aria-hidden="true"><i class="bi bi-chevron-left"></i><i class="bi bi-chevron-right"></i></span>
             <input type="range" class="compare__range" min="0" max="100" value="50" aria-label="Before and after comparison — dental implants">
@@ -442,8 +440,8 @@
       <div class="col-md-6 gallery__item" data-category="ortho">
         <figure class="ba-card">
           <div class="compare">
-            <img class="compare__after" src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=900&q=75&auto=format" alt="Demo: patient fitting a clear orthodontic aligner" loading="lazy">
-            <div class="compare__before"><img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=900&q=75&auto=format" alt="" loading="lazy"></div>
+            <img class="compare__after" src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Demo: patient fitting a clear orthodontic aligner" loading="lazy">
+            <div class="compare__before"><img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="" loading="lazy"></div>
             <span class="compare__tag compare__tag--before">Before</span><span class="compare__tag compare__tag--after">After</span>
             <span class="compare__handle" aria-hidden="true"><i class="bi bi-chevron-left"></i><i class="bi bi-chevron-right"></i></span>
             <input type="range" class="compare__range" min="0" max="100" value="50" aria-label="Before and after comparison — orthodontics">
@@ -480,8 +478,8 @@
 
     <div class="bento">
       <figure class="bento__item bento__item--lg reveal-img"><img src="assets/images/clinic-treatment-room-900.webp" srcset="assets/images/clinic-treatment-room-600.webp 600w, assets/images/clinic-treatment-room-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Bright treatment room with modern dental chair and digital smile display" loading="lazy"><figcaption>Treatment Room</figcaption></figure>
-      <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&q=75&auto=format" alt="Clean, modern dental clinic interior" loading="lazy"><figcaption>Clinic Interior</figcaption></figure>
-      <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=800&q=75&auto=format" alt="Dentist and assistant treating a patient in a modern operatory" loading="lazy"><figcaption>Modern Equipment</figcaption></figure>
+      <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Clean, modern dental clinic interior" loading="lazy"><figcaption>Clinic Interior</figcaption></figure>
+      <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Dentist and assistant treating a patient in a modern operatory" loading="lazy"><figcaption>Modern Equipment</figcaption></figure>
       <div class="bento__item bento__item--cta">
         <ul class="list-unstyled">
           <li><i class="bi bi-check2-circle"></i> Autoclave sterilisation</li>
@@ -718,9 +716,9 @@
       <a href="#blog" class="link-arrow">View all articles <i class="bi bi-arrow-right"></i></a>
     </div>
     <div class="row g-4">
-      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=800&q=75&auto=format" alt="Bamboo toothbrushes in a glass jar" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Prevention</span><time datetime="2026-10-12">Oct 12, 2026</time></div><h3><a href="#blog">7 Essential Tips for Healthy Teeth</a></h3><p>Simple daily habits that protect enamel, gums and your wallet.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=800&q=75&auto=format" alt="Dentist reviewing dental X-ray images" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Check-ups</span><time datetime="2026-09-28">Sep 28, 2026</time></div><h3><a href="#blog">When Should You Visit a Dentist?</a></h3><p>Warning signs you shouldn't ignore — and how often to come in.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=75&auto=format" alt="Smiling man in scrubs showing a bright, healthy smile" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Cosmetic</span><time datetime="2026-09-05">Sep 5, 2026</time></div><h3><a href="#blog">Common Myths About Teeth Whitening</a></h3><p>Does whitening damage enamel? We separate fact from fiction.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Bamboo toothbrushes in a glass jar" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Prevention</span><time datetime="2026-10-12">Oct 12, 2026</time></div><h3><a href="#blog">7 Essential Tips for Healthy Teeth</a></h3><p>Simple daily habits that protect enamel, gums and your wallet.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Dentist reviewing dental X-ray images" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Check-ups</span><time datetime="2026-09-28">Sep 28, 2026</time></div><h3><a href="#blog">When Should You Visit a Dentist?</a></h3><p>Warning signs you shouldn't ignore — and how often to come in.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="post"><a href="#blog" class="post__img"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700&q=70&auto=format" srcset="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=420&q=70&auto=format 420w, https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700&q=70&auto=format 700w, https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=1000&q=70&auto=format 1000w" sizes="(min-width: 992px) 540px, (min-width: 768px) 45vw, 92vw" alt="Smiling man in scrubs showing a bright, healthy smile" loading="lazy"></a><div class="post__body"><div class="post__meta"><span class="post__cat">Cosmetic</span><time datetime="2026-09-05">Sep 5, 2026</time></div><h3><a href="#blog">Common Myths About Teeth Whitening</a></h3><p>Does whitening damage enamel? We separate fact from fiction.</p><a href="#blog" class="link-arrow">Read more <i class="bi bi-arrow-right"></i></a></div></article></div>
     </div>
   </div>
 </section>
@@ -865,6 +863,6 @@
 <script src="assets/js/bootstrap.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/interactions.js" defer></script>
-<!-- gsap, ScrollTrigger, animations.js and swiper-bundle are loaded on demand by main.js / interactions.js -->
+<!-- gsap + animations.js (after page load) and swiper-bundle (near the sliders) are loaded on demand by main.js / interactions.js -->
 </body>
 </html>

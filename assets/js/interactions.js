@@ -27,7 +27,6 @@
       if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         gsap.fromTo(visible, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: .5, stagger: .08, ease: 'power3.out' });
       }
-      if (window.ScrollTrigger) ScrollTrigger.refresh();
     });
   });
 
@@ -109,6 +108,10 @@
   const sliderIO = new IntersectionObserver((entries) => {
     if (!entries.some((e) => e.isIntersecting)) return;
     sliderIO.disconnect();
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'assets/css/swiper-bundle.min.css';
+    document.head.appendChild(css);
     window.loadScript('assets/js/swiper-bundle.min.js').then(initSliders).catch(() => {});
   }, { rootMargin: '600px 0px' });
   sliderEls.forEach((el) => sliderIO.observe(el));

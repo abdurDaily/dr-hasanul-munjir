@@ -87,6 +87,14 @@ strong { font-weight: 700; }
 .skip-link { position: absolute; left: 1rem; top: -100px; z-index: 2000; background: var(--c-primary); color: #fff; padding: .6rem 1rem; border-radius: var(--r-sm); }
 .skip-link:focus { top: 1rem; color: #fff; }
 
+/* Rendering performance: off-screen sections skip layout & paint until they near the viewport */
+main > section:not(.hero), .footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+
+/* Minimal slider structure so sliders lay out correctly before Swiper's own CSS/JS load */
+.swiper { position: relative; overflow: hidden; }
+.swiper-wrapper { display: flex; box-sizing: content-box; }
+.swiper-slide { flex-shrink: 0; width: 100%; position: relative; }
+
 .section-pad { padding-block: var(--sp-section); }
 .section-pad-sm { padding-block: var(--sp-section-sm); }
 

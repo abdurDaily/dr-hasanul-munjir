@@ -50,7 +50,27 @@ window.SITE_CONFIG = {
 
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  /* ---------- Smooth scroll (closes offcanvas first on mobile) ---------- */
+  /* ---------- Smooth scroll (closes offcanvas first on mobile) ----------
+     Off-screen sections use content-visibility:auto, so their heights are estimates
+     until rendered. After each scroll settles we re-check the target and correct. */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrollOffset = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const scrollToSection = (target, attempt = 0) => {
+    target.scrollIntoView({ behavior: reduceMotion || attempt ? 'auto' : 'smooth', block: 'start' });
+    if (attempt >= 3) return;
+    const settle = () => {
+      const off = target.getBoundingClientRect().top - scrollOffset();
+      if (Math.abs(off) > 4) scrollToSection(target, attempt + 1);
+    };
+    if ('onscrollend' in window) window.addEventListener('scrollend', settle, { once: true });
+    else setTimeout(settle, 900);
+  };
+  // Deep links (e.g. …/#appointment) need the same correction after load
+  if (location.hash.length > 1) {
+    const deep = document.querySelector(location.hash);
+    if (deep) window.addEventListener('load', () => scrollToSection(deep, 1), { once: true });
+  }
+
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href^="#"]');
     if (!link) return;
@@ -61,7 +81,7 @@ window.SITE_CONFIG = {
 
     e.preventDefault();
     const go = () => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToSection(target);
       history.replaceState(null, '', id);
     };
 
@@ -106,7 +126,6 @@ window.SITE_CONFIG = {
     const startAnimations = () => {
       Promise.all([
         window.loadScript('assets/js/gsap.min.js'),
-        window.loadScript('assets/js/ScrollTrigger.min.js'),
         window.loadScript('assets/js/animations.js'),
       ]).catch(() => {});
     };
