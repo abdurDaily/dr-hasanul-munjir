@@ -73,7 +73,6 @@ body {
   background: var(--c-bg);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--c-secondary); text-decoration: none; transition: color var(--t-fast); }
