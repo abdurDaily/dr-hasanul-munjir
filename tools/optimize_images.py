@@ -11,7 +11,7 @@ IMG = Path("assets/images")
 
 # source file -> widths to generate (largest first)
 JOBS = {
-    "dr-munjir-hero.png": [960, 720, 480],      # hero cut-out (keeps transparency)
+    "dr-munjir-hero.png": [960, 720, 600, 480],      # hero cut-out (keeps transparency)
     "dr-munjir-treatment.jpg": [900, 600],
     "dr-munjir-scaling.jpg": [900, 600],
     "dr-munjir-procedure.jpg": [900, 600],

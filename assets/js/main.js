@@ -46,7 +46,8 @@ window.SITE_CONFIG = {
   window.addEventListener('scroll', () => {
     if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
   }, { passive: true });
-  requestAnimationFrame(onScroll);
+  // Only measure at startup if the page opened already scrolled (avoids a forced layout on load)
+  if (window.scrollY > 0) requestAnimationFrame(onScroll);
 
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
