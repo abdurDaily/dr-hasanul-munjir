@@ -50,6 +50,77 @@ window.SITE_CONFIG = {
 
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+  /* ---------- Mobile menu (offcanvas) ----------
+     Small replacement for Bootstrap's Offcanvas JS: reuses Bootstrap's CSS classes
+     (.showing/.show/.hiding, .offcanvas-backdrop) and handles focus, Esc, backdrop
+     click, Tab trapping and scroll locking. */
+  const menu = (() => {
+    const toggles = document.querySelectorAll('[data-offcanvas-open="#mobileNav"]');
+    const focusable = () => offcanvasEl.querySelectorAll('a[href], button:not([disabled])');
+    let backdrop = null;
+    let returnFocus = null;
+
+    const afterTransition = (fn) => {
+      let done = false;
+      const finish = () => { if (!done) { done = true; fn(); } };
+      offcanvasEl.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 450); // fallback (reduced motion / no transition)
+    };
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') { hide(); return; }
+      if (e.key !== 'Tab') return;
+      const items = [...focusable()];
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+
+    function show() {
+      if (offcanvasEl.classList.contains('show')) return;
+      returnFocus = document.activeElement;
+      backdrop = document.createElement('div');
+      backdrop.className = 'offcanvas-backdrop fade';
+      backdrop.addEventListener('click', () => hide());
+      document.body.appendChild(backdrop);
+      document.body.style.overflow = 'hidden';
+      offcanvasEl.setAttribute('role', 'dialog');
+      offcanvasEl.setAttribute('aria-modal', 'true');
+      offcanvasEl.classList.add('showing');
+      toggles.forEach((t) => t.setAttribute('aria-expanded', 'true'));
+      requestAnimationFrame(() => {
+        backdrop.classList.add('show');
+        offcanvasEl.classList.add('show');
+        afterTransition(() => offcanvasEl.classList.remove('showing'));
+        const firstItem = focusable()[0];
+        if (firstItem) firstItem.focus({ preventScroll: true });
+      });
+      document.addEventListener('keydown', onKey);
+    }
+
+    function hide(onHidden) {
+      if (!offcanvasEl.classList.contains('show')) { if (onHidden) onHidden(); return; }
+      document.removeEventListener('keydown', onKey);
+      offcanvasEl.classList.add('hiding');
+      offcanvasEl.classList.remove('show');
+      if (backdrop) backdrop.classList.remove('show');
+      toggles.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+      afterTransition(() => {
+        offcanvasEl.classList.remove('hiding');
+        offcanvasEl.removeAttribute('role');
+        offcanvasEl.removeAttribute('aria-modal');
+        if (backdrop) { backdrop.remove(); backdrop = null; }
+        document.body.style.overflow = '';
+        if (onHidden) onHidden(); else if (returnFocus) returnFocus.focus({ preventScroll: true });
+      });
+    }
+
+    toggles.forEach((t) => t.addEventListener('click', show));
+    offcanvasEl.querySelectorAll('[data-offcanvas-close]').forEach((b) => b.addEventListener('click', () => hide()));
+    return { show, hide };
+  })();
+
   /* ---------- Smooth scroll (closes offcanvas first on mobile) ----------
      Off-screen sections use content-visibility:auto, so their heights are estimates
      until rendered. After each scroll settles we re-check the target and correct. */
@@ -85,13 +156,7 @@ window.SITE_CONFIG = {
       history.replaceState(null, '', id);
     };
 
-    const oc = window.bootstrap && bootstrap.Offcanvas.getInstance(offcanvasEl);
-    if (oc && offcanvasEl.classList.contains('show')) {
-      offcanvasEl.addEventListener('hidden.bs.offcanvas', go, { once: true });
-      oc.hide();
-    } else {
-      go();
-    }
+    if (offcanvasEl.classList.contains('show')) menu.hide(go); else go();
   });
 
   /* ---------- Active navigation highlighting ---------- */

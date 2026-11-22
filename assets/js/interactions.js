@@ -5,6 +5,48 @@
 (() => {
   'use strict';
 
+  /* ---------- FAQ accordion ----------
+     Small replacement for Bootstrap's Collapse JS (reuses .collapse/.collapsing/.show CSS).
+     One panel open at a time within the same data-collapse-parent. */
+  const collapse = (panel, open) => {
+    if (panel.classList.contains('show') === open || panel.classList.contains('collapsing')) return;
+    const end = () => {
+      panel.classList.remove('collapsing');
+      panel.classList.add('collapse');
+      panel.classList.toggle('show', open);
+      panel.style.height = '';
+    };
+    panel.style.height = open ? '0px' : `${panel.getBoundingClientRect().height}px`;
+    panel.classList.remove('collapse', 'show');
+    panel.classList.add('collapsing');
+    void panel.offsetHeight; // start the transition from the height set above
+    panel.style.height = open ? `${panel.scrollHeight}px` : '0px';
+    let done = false;
+    const finish = () => { if (!done) { done = true; end(); } };
+    panel.addEventListener('transitionend', finish, { once: true });
+    setTimeout(finish, 500);
+  };
+
+  document.querySelectorAll('[data-collapse]').forEach((btn) => {
+    const panel = document.querySelector(btn.dataset.collapse);
+    if (!panel) return;
+    btn.addEventListener('click', () => {
+      const open = !panel.classList.contains('show');
+      const group = panel.dataset.collapseParent && document.querySelector(panel.dataset.collapseParent);
+      if (open && group) {
+        group.querySelectorAll('.collapse.show').forEach((other) => {
+          if (other === panel) return;
+          collapse(other, false);
+          const otherBtn = group.querySelector(`[data-collapse="#${other.id}"]`);
+          if (otherBtn) { otherBtn.classList.add('collapsed'); otherBtn.setAttribute('aria-expanded', 'false'); }
+        });
+      }
+      collapse(panel, open);
+      btn.classList.toggle('collapsed', !open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
   /* ---------- Gallery filtering ---------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const galleryItems = document.querySelectorAll('.gallery__item');
@@ -381,11 +423,20 @@
     }, 1400);
   });
 
-  // Initial state: first day with availability, no time chosen yet
-  for (let d = today; d <= lastDay; d = addDays(d, 1)) {
-    if (hasAvailability(d)) { selectDate(d); break; }
-  }
-  if (!state.date) { renderCalendar(); renderSlots(); updateSummary(); }
+  // Initial state: first day with availability, no time chosen yet.
+  // Built only when the booking section approaches, keeping page load light.
+  const initBooking = () => {
+    for (let d = today; d <= lastDay; d = addDays(d, 1)) {
+      if (hasAvailability(d)) { selectDate(d); break; }
+    }
+    if (!state.date) { renderCalendar(); renderSlots(); updateSummary(); }
+  };
+  const bookingIO = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    bookingIO.disconnect();
+    initBooking();
+  }, { rootMargin: '800px 0px' });
+  bookingIO.observe(form);
 
   /* ---------- Newsletter ---------- */
   const nl = document.getElementById('newsletterForm');

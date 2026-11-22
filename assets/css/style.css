@@ -88,7 +88,7 @@ strong { font-weight: 700; }
 .skip-link:focus { top: 1rem; color: #fff; }
 
 /* Rendering performance: off-screen sections skip layout & paint until they near the viewport */
-main > section:not(.hero), .footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+main > section:not(.hero) { content-visibility: auto; contain-intrinsic-size: auto 900px; }
 
 /* Minimal slider structure so sliders lay out correctly before Swiper's own CSS/JS load */
 .swiper { position: relative; overflow: hidden; }
@@ -425,7 +425,7 @@ main > section:not(.hero), .footer { content-visibility: auto; contain-intrinsic
 .compare:focus-within .compare__handle::before { outline: 3px solid #fff; }
 .compare__tag { position: absolute; top: 1rem; z-index: 2; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .75rem; border-radius: var(--r-pill); pointer-events: none; }
 .compare__tag--before { left: 1rem; background: rgba(16, 37, 44, .8); color: #fff; }
-.compare__tag--after { right: 1rem; background: var(--c-cyan); color: #fff; }
+.compare__tag--after { right: 1rem; background: var(--c-secondary); color: #fff; }
 
 .lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(10, 23, 28, .92); display: grid; place-items: center; padding: 1.5rem; }
 .lightbox[hidden] { display: none; }
