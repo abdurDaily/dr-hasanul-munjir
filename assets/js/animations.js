@@ -18,18 +18,9 @@
 
   const exists = (sel) => document.querySelector(sel) !== null;
 
-  /* ---------- Hero intro ---------- */
-  gsap.timeline({ delay: .1 })
-    .from('.hero__shell', { y: 30, autoAlpha: 0, duration: .9 })
-    .from('.hero__tag', { x: -20, autoAlpha: 0, duration: .6 }, '-=.4')
-    .from('.hero__card', { y: 30, autoAlpha: 0, duration: .8 }, '-=.3')
-    .from('.hero__title .line__inner', { yPercent: 110, duration: 1, stagger: .12, ease: 'power4.out' }, '-=.5')
-    .from('.hero__ctas > *, .hero__clients', { y: 20, autoAlpha: 0, stagger: .08, duration: .7 }, '-=.6')
-    .from('.hero__doctor', { y: 60, autoAlpha: 0, duration: 1.2 }, .4)
-    .from('.hero__doodle path', { strokeDashoffset: 300, duration: 1.2, ease: 'power2.inOut' }, '-=.8')
-    .from('.hero-chip', { scale: .8, autoAlpha: 0, stagger: .15, duration: .7, ease: 'back.out(1.7)' }, '-=.6')
-    .from('.hero__note', { y: 16, autoAlpha: 0, duration: .6 }, '-=.3');
-
+  /* ---------- Hero ----------
+     No entrance animation: the hero (and its portrait, the page's LCP element)
+     paints immediately. Only the floating cards get a gentle idle motion. */
   gsap.to('.hero-chip--exp', { y: -8, duration: 3, ease: 'sine.inOut', repeat: -1, yoyo: true });
   gsap.to('.hero-chip--doc', { y: 8, duration: 3.4, ease: 'sine.inOut', repeat: -1, yoyo: true });
   /* ---------- Section headings: masked reveal ---------- */
@@ -120,6 +111,6 @@
     });
   }
 
-  // Recalculate trigger positions once images/fonts settle
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  // This file is loaded after window 'load', so positions are already settled
+  ScrollTrigger.refresh();
 })();

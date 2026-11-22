@@ -71,6 +71,8 @@
   .hero__left { margin-top: -1rem; }
   .hero__note { display: none; }
   .hero__card { margin-inline: auto; }
+  /* Blur filters are expensive on phones — use solid frosted colours instead */
+  .hero__card, .hero-chip { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(255, 255, 255, .88); }
   .section-head__aside { margin-top: 1rem; }
   .why__slider-wrap { max-width: 560px; margin-inline: auto; }
 }

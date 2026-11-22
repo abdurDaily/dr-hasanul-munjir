@@ -4,12 +4,16 @@
    Mobile-first. Breakpoint overrides live in responsive.css
    ========================================================================== */
 
+/* ---------- 0. Self-hosted fonts (latin subset, variable weights) ---------- */
+@font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("../fonts/SpaceGrotesk-latin-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("../fonts/Inter-latin-normal.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/InstrumentSerif-latin-italic.woff2") format("woff2"); }
 /* ---------- 1. Design tokens ---------- */
 :root {
   /* Colour — trust: clean ink + clinical cyan */
   --c-primary: #10252C;      /* ink — headings, dark buttons */
   --c-primary-900: #0A171C;
-  --c-secondary: #0A8995;    /* cyan, text-safe (AA on white) */
+  --c-secondary: #077A85;    /* cyan, text-safe: 4.9:1 on white */
   --c-cyan: #14B1BE;         /* bright cyan for icons, lines, fills */
   --c-accent: #CDEFF2;       /* aqua */
   --c-accent-50: #EBF8F9;

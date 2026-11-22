@@ -74,8 +74,8 @@
     if (e.key === 'Tab') { e.preventDefault(); lbClose.focus(); } // single focusable element: trap focus
   });
 
-  /* ---------- Sliders ---------- */
-  if (window.Swiper) {
+  /* ---------- Sliders (Swiper is fetched only when a slider is about to scroll into view) ---------- */
+  const initSliders = () => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Google-style reviews
@@ -103,7 +103,15 @@
       navigation: { nextEl: '.why-nav--next', prevEl: '.why-nav--prev' },
       a11y: { enabled: true },
     });
-  }
+  };
+
+  const sliderEls = document.querySelectorAll('.why-swiper, .testimonial-swiper');
+  const sliderIO = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    sliderIO.disconnect();
+    window.loadScript('assets/js/swiper-bundle.min.js').then(initSliders).catch(() => {});
+  }, { rootMargin: '600px 0px' });
+  sliderEls.forEach((el) => sliderIO.observe(el));
 
   /* ---------- Treatment "Learn more" → preselect treatment in form ---------- */
   const treatmentSelect = document.getElementById('fTreatment');

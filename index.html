@@ -30,14 +30,16 @@
   <meta name="twitter:image" content="https://abdurdaily.github.io/dr-hasanul-munjir/assets/images/og-image.jpg">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Self-hosted fonts (latin subset) — preload the ones used above the fold -->
+  <link rel="preload" href="assets/fonts/SpaceGrotesk-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Inter-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Hero portrait is the largest element: fetch it first -->
+  <link rel="preload" as="image" type="image/webp" imagesrcset="assets/images/dr-munjir-hero-480.webp 480w, assets/images/dr-munjir-hero-720.webp 720w, assets/images/dr-munjir-hero-960.webp 960w" imagesizes="(min-width: 992px) 580px, min(420px, 88vw)" fetchpriority="high">
 
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/icons.min.css">
   <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
@@ -73,7 +75,7 @@
 <header class="site-header" id="siteHeader">
   <nav class="navbar navbar-expand-xl" aria-label="Main navigation">
     <div class="container">
-      <a class="brand" href="#home" aria-label="Dr. Hasanul Munjir — home">
+      <a class="brand" href="#home">
         <span class="brand__mark" aria-hidden="true">
           <svg viewBox="0 0 40 40"><path d="M20 7c-3-2.6-9.5-3.2-12 .8-2.6 4.2-.6 9.6.9 13.4 1.2 3.2 1.5 12.3 4.6 12.3 2.8 0 2.6-8.6 6.5-8.6s3.7 8.6 6.5 8.6c3.1 0 3.4-9.1 4.6-12.3 1.5-3.8 3.5-9.2.9-13.4C29.5 3.8 23 4.4 20 7Z"/></svg>
         </span>
@@ -157,7 +159,7 @@
       </div>
 
       <div class="hero__stage">
-        <img class="hero__doctor" src="assets/images/dr-munjir-hero.png" alt="Dr. Hasanul Munjir in a white coat, smiling with arms crossed" width="1208" height="1302" fetchpriority="high">
+        <img class="hero__doctor" src="assets/images/dr-munjir-hero-720.webp" srcset="assets/images/dr-munjir-hero-480.webp 480w, assets/images/dr-munjir-hero-720.webp 720w, assets/images/dr-munjir-hero-960.webp 960w" sizes="(min-width: 992px) 580px, min(420px, 88vw)" alt="Dr. Hasanul Munjir in a white coat, smiling with arms crossed" width="1208" height="1302" fetchpriority="high" decoding="async">
 
         <div class="hero-chip hero-chip--exp">
           <span class="hero-chip__icon"><i class="bi bi-award"></i></span>
@@ -202,10 +204,10 @@
       <div class="col-lg-5">
         <div class="about__media">
           <div class="about__img-main reveal-img">
-            <img src="assets/images/dr-munjir-treatment.jpg" alt="Dr. Munjir examining a patient's teeth with an ultrasonic scaler" loading="lazy" width="1939" height="2048">
+            <img src="assets/images/dr-munjir-treatment-900.webp" srcset="assets/images/dr-munjir-treatment-600.webp 600w, assets/images/dr-munjir-treatment-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir examining a patient's teeth with an ultrasonic scaler" loading="lazy" width="1939" height="2048">
           </div>
           <div class="about__img-small reveal-img">
-            <img src="assets/images/endodontics-training.jpg" alt="Dr. Munjir receiving a certificate at a Precision Endodontics hands-on training program" loading="lazy" width="1536" height="2048">
+            <img src="assets/images/endodontics-training-900.webp" srcset="assets/images/endodontics-training-600.webp 600w, assets/images/endodontics-training-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir receiving a certificate at a Precision Endodontics hands-on training program" loading="lazy" width="1536" height="2048">
           </div>
           <div class="about__exp">
             <strong>10<sup>+</sup></strong>
@@ -261,15 +263,15 @@
     </div>
 
     <div class="row g-4 treat-grid">
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/general.jpg" alt="Dentist checking a patient's teeth with a dental mirror" loading="lazy" width="800" height="560"><span class="treat-card__num">01</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-shield-plus"></i></span><h3>General Dentistry</h3><p>Check-ups, scaling, fillings and preventive care that keep small problems small.</p><a href="#appointment" class="treat-card__link" data-treatment="General Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/cosmetic.jpg" alt="Curing light used during cosmetic tooth bonding" loading="lazy" width="800" height="560"><span class="treat-card__num">02</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-gem"></i></span><h3>Cosmetic Dentistry</h3><p>Smile designing, veneers and bonding tailored to your face and natural features.</p><a href="#appointment" class="treat-card__link" data-treatment="Cosmetic Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/whitening.jpg" alt="Patient receiving in-office teeth whitening with a whitening lamp" loading="lazy" width="800" height="560"><span class="treat-card__num">03</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-brightness-high"></i></span><h3>Teeth Whitening</h3><p>Safe, professionally supervised whitening for a brighter smile without sensitivity.</p><a href="#appointment" class="treat-card__link" data-treatment="Teeth Whitening">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/implants.jpg" alt="Model showing a dental implant screw between natural teeth" loading="lazy" width="800" height="560"><span class="treat-card__num">04</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-nut"></i></span><h3>Dental Implants</h3><p>Permanent, natural-looking replacements for missing teeth that restore full function.</p><a href="#appointment" class="treat-card__link" data-treatment="Dental Implants">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card treat-card--featured"><div class="treat-card__media"><img src="assets/images/treatments/root-canal.jpg" alt="Dental X-ray showing tooth roots on a monitor" loading="lazy" width="800" height="560"><span class="treat-card__num">05</span><span class="treat-card__tag"><i class="bi bi-star-fill"></i> Speciality</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-activity"></i></span><h3>Root Canal Treatment</h3><p>Precision rotary endodontics that relieves pain and saves your natural tooth.</p><a href="#appointment" class="treat-card__link" data-treatment="Root Canal Treatment">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/orthodontics.jpg" alt="Dental model with orthodontic braces" loading="lazy" width="800" height="560"><span class="treat-card__num">06</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-grid-3x2-gap"></i></span><h3>Orthodontics &amp; Braces</h3><p>Metal, ceramic and clear aligner options to straighten teeth at any age.</p><a href="#appointment" class="treat-card__link" data-treatment="Orthodontics &amp; Braces">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/pediatric.jpg" alt="Child having a gentle dental check-up" loading="lazy" width="800" height="560"><span class="treat-card__num">07</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-balloon-heart"></i></span><h3>Pediatric Dentistry</h3><p>Friendly, fear-free visits that build healthy habits for little smiles.</p><a href="#appointment" class="treat-card__link" data-treatment="Pediatric Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/crowns.jpg" alt="Dental model showing a crown and implant restoration" loading="lazy" width="800" height="560"><span class="treat-card__num">08</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-bricks"></i></span><h3>Crowns &amp; Bridges</h3><p>Durable, colour-matched restorations that rebuild strength and appearance.</p><a href="#appointment" class="treat-card__link" data-treatment="Crowns &amp; Bridges">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
-      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/gum.jpg" alt="Dentist examining a patient's gums and teeth" loading="lazy" width="800" height="560"><span class="treat-card__num">09</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-droplet-half"></i></span><h3>Gum Disease Treatment</h3><p>Deep cleaning and periodontal therapy to stop bleeding gums and bone loss.</p><a href="#appointment" class="treat-card__link" data-treatment="Gum Disease Treatment">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/general-640.webp" alt="Dentist checking a patient's teeth with a dental mirror" loading="lazy" width="800" height="560"><span class="treat-card__num">01</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-shield-plus"></i></span><h3>General Dentistry</h3><p>Check-ups, scaling, fillings and preventive care that keep small problems small.</p><a href="#appointment" class="treat-card__link" data-treatment="General Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/cosmetic-640.webp" alt="Curing light used during cosmetic tooth bonding" loading="lazy" width="800" height="560"><span class="treat-card__num">02</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-gem"></i></span><h3>Cosmetic Dentistry</h3><p>Smile designing, veneers and bonding tailored to your face and natural features.</p><a href="#appointment" class="treat-card__link" data-treatment="Cosmetic Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/whitening-640.webp" alt="Patient receiving in-office teeth whitening with a whitening lamp" loading="lazy" width="800" height="560"><span class="treat-card__num">03</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-brightness-high"></i></span><h3>Teeth Whitening</h3><p>Safe, professionally supervised whitening for a brighter smile without sensitivity.</p><a href="#appointment" class="treat-card__link" data-treatment="Teeth Whitening">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/implants-640.webp" alt="Model showing a dental implant screw between natural teeth" loading="lazy" width="800" height="560"><span class="treat-card__num">04</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-nut"></i></span><h3>Dental Implants</h3><p>Permanent, natural-looking replacements for missing teeth that restore full function.</p><a href="#appointment" class="treat-card__link" data-treatment="Dental Implants">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card treat-card--featured"><div class="treat-card__media"><img src="assets/images/treatments/root-canal-640.webp" alt="Dental X-ray showing tooth roots on a monitor" loading="lazy" width="800" height="560"><span class="treat-card__num">05</span><span class="treat-card__tag"><i class="bi bi-star-fill"></i> Speciality</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-activity"></i></span><h3>Root Canal Treatment</h3><p>Precision rotary endodontics that relieves pain and saves your natural tooth.</p><a href="#appointment" class="treat-card__link" data-treatment="Root Canal Treatment">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/orthodontics-640.webp" alt="Dental model with orthodontic braces" loading="lazy" width="800" height="560"><span class="treat-card__num">06</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-grid-3x2-gap"></i></span><h3>Orthodontics &amp; Braces</h3><p>Metal, ceramic and clear aligner options to straighten teeth at any age.</p><a href="#appointment" class="treat-card__link" data-treatment="Orthodontics &amp; Braces">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/pediatric-640.webp" alt="Child having a gentle dental check-up" loading="lazy" width="800" height="560"><span class="treat-card__num">07</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-balloon-heart"></i></span><h3>Pediatric Dentistry</h3><p>Friendly, fear-free visits that build healthy habits for little smiles.</p><a href="#appointment" class="treat-card__link" data-treatment="Pediatric Dentistry">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/crowns-640.webp" alt="Dental model showing a crown and implant restoration" loading="lazy" width="800" height="560"><span class="treat-card__num">08</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-bricks"></i></span><h3>Crowns &amp; Bridges</h3><p>Durable, colour-matched restorations that rebuild strength and appearance.</p><a href="#appointment" class="treat-card__link" data-treatment="Crowns &amp; Bridges">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
+      <div class="col-md-6 col-lg-4"><article class="treat-card"><div class="treat-card__media"><img src="assets/images/treatments/gum-640.webp" alt="Dentist examining a patient's gums and teeth" loading="lazy" width="800" height="560"><span class="treat-card__num">09</span></div><div class="treat-card__body"><span class="treat-card__icon"><i class="bi bi-droplet-half"></i></span><h3>Gum Disease Treatment</h3><p>Deep cleaning and periodontal therapy to stop bleeding gums and bone loss.</p><a href="#appointment" class="treat-card__link" data-treatment="Gum Disease Treatment">Book this treatment <i class="bi bi-arrow-right"></i></a></div></article></div>
     </div>
   </div>
 </section>
@@ -282,11 +284,11 @@
         <div class="why__slider-wrap">
           <div class="swiper why-swiper">
             <div class="swiper-wrapper">
-              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-scaling.jpg" alt="Dr. Munjir performing ultrasonic scaling for a patient" loading="lazy"><figcaption><strong>Ultrasonic scaling</strong><span>Gentle, thorough cleaning</span></figcaption></figure>
-              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-procedure.jpg" alt="Dr. Munjir performing a procedure with digital imaging on a laptop beside the chair" loading="lazy"><figcaption><strong>Digital imaging</strong><span>See exactly what we see</span></figcaption></figure>
-              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-treatment.jpg" alt="Dr. Munjir carefully treating a relaxed patient" loading="lazy"><figcaption><strong>Patient-first care</strong><span>Comfort at every step</span></figcaption></figure>
-              <figure class="swiper-slide why-slide"><img src="assets/images/endodontics-training.jpg" alt="Dr. Munjir receiving a certificate of achievement in endodontics" loading="lazy"><figcaption><strong>Always learning</strong><span>Advanced endodontic training</span></figcaption></figure>
-              <figure class="swiper-slide why-slide"><img src="assets/images/clinic-treatment-room.jpg" alt="Bright, modern treatment room" loading="lazy"><figcaption><strong>Modern clinic</strong><span>Clean, calm &amp; sterilised</span></figcaption></figure>
+              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-scaling-900.webp" srcset="assets/images/dr-munjir-scaling-600.webp 600w, assets/images/dr-munjir-scaling-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir performing ultrasonic scaling for a patient" loading="lazy"><figcaption><strong>Ultrasonic scaling</strong><span>Gentle, thorough cleaning</span></figcaption></figure>
+              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-procedure-900.webp" srcset="assets/images/dr-munjir-procedure-600.webp 600w, assets/images/dr-munjir-procedure-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir performing a procedure with digital imaging on a laptop beside the chair" loading="lazy"><figcaption><strong>Digital imaging</strong><span>See exactly what we see</span></figcaption></figure>
+              <figure class="swiper-slide why-slide"><img src="assets/images/dr-munjir-treatment-900.webp" srcset="assets/images/dr-munjir-treatment-600.webp 600w, assets/images/dr-munjir-treatment-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir carefully treating a relaxed patient" loading="lazy"><figcaption><strong>Patient-first care</strong><span>Comfort at every step</span></figcaption></figure>
+              <figure class="swiper-slide why-slide"><img src="assets/images/endodontics-training-900.webp" srcset="assets/images/endodontics-training-600.webp 600w, assets/images/endodontics-training-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir receiving a certificate of achievement in endodontics" loading="lazy"><figcaption><strong>Always learning</strong><span>Advanced endodontic training</span></figcaption></figure>
+              <figure class="swiper-slide why-slide"><img src="assets/images/clinic-treatment-room-900.webp" srcset="assets/images/clinic-treatment-room-600.webp 600w, assets/images/clinic-treatment-room-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Bright, modern treatment room" loading="lazy"><figcaption><strong>Modern clinic</strong><span>Clean, calm &amp; sterilised</span></figcaption></figure>
             </div>
             <div class="why-swiper__bar">
               <div class="swiper-pagination why-swiper__pagination"></div>
@@ -327,7 +329,7 @@
     <!-- Featured: latest advanced training -->
     <article class="xp-feature">
       <div class="xp-feature__media reveal-img">
-        <img src="assets/images/endodontics-training.jpg" alt="Dr. Munjir receiving his certificate at the Precision Endodontics training program" loading="lazy">
+        <img src="assets/images/endodontics-training-900.webp" srcset="assets/images/endodontics-training-600.webp 600w, assets/images/endodontics-training-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Dr. Munjir receiving his certificate at the Precision Endodontics training program" loading="lazy">
         <span class="xp-feature__year">2026</span>
       </div>
       <div class="xp-feature__body">
@@ -477,7 +479,7 @@
     </div>
 
     <div class="bento">
-      <figure class="bento__item bento__item--lg reveal-img"><img src="assets/images/clinic-treatment-room.jpg" alt="Bright treatment room with modern dental chair and digital smile display" loading="lazy"><figcaption>Treatment Room</figcaption></figure>
+      <figure class="bento__item bento__item--lg reveal-img"><img src="assets/images/clinic-treatment-room-900.webp" srcset="assets/images/clinic-treatment-room-600.webp 600w, assets/images/clinic-treatment-room-900.webp 900w" sizes="(min-width: 992px) 560px, 92vw" alt="Bright treatment room with modern dental chair and digital smile display" loading="lazy"><figcaption>Treatment Room</figcaption></figure>
       <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&q=75&auto=format" alt="Clean, modern dental clinic interior" loading="lazy"><figcaption>Clinic Interior</figcaption></figure>
       <figure class="bento__item reveal-img"><img src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?w=800&q=75&auto=format" alt="Dentist and assistant treating a patient in a modern operatory" loading="lazy"><figcaption>Modern Equipment</figcaption></figure>
       <div class="bento__item bento__item--cta">
@@ -667,7 +669,7 @@
             <div class="summary__top">
               <h3 class="summary__title">Booking Summary</h3>
               <div class="summary__doc">
-                <img src="assets/images/dr-munjir-portrait.jpg" alt="Dr. Hasanul Munjir" width="64" height="64" loading="lazy">
+                <img src="assets/images/dr-munjir-portrait-160.webp" alt="Dr. Hasanul Munjir" width="64" height="64" loading="lazy">
                 <div>
                   <strong>Dr. Hasanul Munjir</strong>
                   <span>BDS (CU) · PGT (OMS)</span>
@@ -860,12 +862,9 @@
 <button type="button" class="to-top" id="toTop" aria-label="Back to top"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22"/></svg><i class="bi bi-arrow-up"></i></button>
 
 <!-- Scripts -->
-<script src="assets/js/bootstrap.bundle.min.js" defer></script>
-<script src="assets/js/gsap.min.js" defer></script>
-<script src="assets/js/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/swiper-bundle.min.js" defer></script>
+<script src="assets/js/bootstrap.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/interactions.js" defer></script>
-<script src="assets/js/animations.js" defer></script>
+<!-- gsap, ScrollTrigger, animations.js and swiper-bundle are loaded on demand by main.js / interactions.js -->
 </body>
 </html>

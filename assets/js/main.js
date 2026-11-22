@@ -3,6 +3,19 @@
    (sticky header, active nav, smooth scroll, back-to-top, WhatsApp, year)
    ========================================================================== */
 
+/** Load a script once; resolves when it has executed. Used to keep heavy libraries off the critical path. */
+window.loadScript = (() => {
+  const cache = {};
+  return (src) => (cache[src] ||= new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = false; // preserve execution order when several are requested together
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  }));
+})();
+
 /** Site-wide configuration — edit these values for the live site. */
 window.SITE_CONFIG = {
   whatsappNumber: '8801690106079', // international format, digits only — confirm this number uses WhatsApp
@@ -20,19 +33,20 @@ window.SITE_CONFIG = {
   /* ---------- Sticky header + back-to-top progress ---------- */
   let ticking = false;
   const onScroll = () => {
+    // Read layout first, then write — avoids a forced reflow on every scroll
     const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = max > 0 ? y / max : 0;
     header.classList.toggle('is-scrolled', y > 40);
     toTop.classList.toggle('is-visible', y > 600);
 
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = max > 0 ? y / max : 0;
     toTop.style.setProperty('--progress', (CIRCLE * (1 - progress)).toFixed(1));
     ticking = false;
   };
   window.addEventListener('scroll', () => {
     if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
   }, { passive: true });
-  onScroll();
+  requestAnimationFrame(onScroll);
 
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
@@ -85,6 +99,21 @@ window.SITE_CONFIG = {
     el.target = '_blank';
     el.rel = 'noopener';
   });
+
+  /* ---------- Scroll animations: load GSAP after the page has rendered ---------- */
+  // Content is fully visible without it; GSAP only enhances what is below the fold.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const startAnimations = () => {
+      Promise.all([
+        window.loadScript('assets/js/gsap.min.js'),
+        window.loadScript('assets/js/ScrollTrigger.min.js'),
+        window.loadScript('assets/js/animations.js'),
+      ]).catch(() => {});
+    };
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1));
+    const schedule = () => idle(startAnimations, { timeout: 2000 });
+    if (document.readyState === 'complete') schedule(); else window.addEventListener('load', schedule, { once: true });
+  }
 
   /* ---------- Footer year ---------- */
   const year = document.getElementById('year');
