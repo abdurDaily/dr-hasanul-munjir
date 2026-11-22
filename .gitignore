@@ -1,0 +1,10 @@
+# Raw client uploads & design references — the site uses optimised copies in assets/images
+/images/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Unused since the hero redesign (kept locally only)
+/assets/videos/

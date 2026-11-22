@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Responsive overrides (mobile-first: base styles target 320–575px)
+   ========================================================================== */
+
+/* Small phones */
+@media (max-width: 399.98px) {
+  .brand__text strong { font-size: 1.05rem; }
+  .brand__text small { font-size: .64rem; }
+  .brand__mark { width: 40px; height: 40px; }
+}
+
+/* < 576px */
+@media (max-width: 575.98px) {
+  .hero__card { padding: 1.5rem 1.2rem; }
+  .hero-chip--doc { display: none; }
+  .hero-chip--exp { top: auto; bottom: 22%; right: .25rem; }
+  .container { --bs-gutter-x: 2.5rem; }   /* roomier side padding on phones */
+  .stat { padding: 1.3rem .75rem 1.2rem; }
+  .hero__ctas { grid-template-columns: 1fr; }
+}
+
+/* ≥576px — large phones / small tablets */
+@media (min-width: 576px) {
+  .bk-card { padding: 1.8rem; }
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .bento__item--lg { grid-column: span 2; min-height: 340px; }
+  .footer__bottom { flex-direction: row; align-items: center; }
+  .contact__cards { grid-template-columns: 1fr 1fr; }
+  .c-card--cta { grid-column: span 2; }
+}
+
+/* < 768px — tighten absolutely-positioned decor */
+@media (max-width: 767.98px) {
+  .about__media { padding: 0 1.5rem 3rem 0; }
+  .about__exp { left: .5rem; }
+  /* Gallery filters: one horizontally scrollable row */
+  .section-head .filters { margin: 1.2rem 0 0; padding: 0 0 .4rem; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  .section-head .filters::-webkit-scrollbar { display: none; }
+  .filter-btn { scroll-snap-align: start; }
+  .why__badge { right: .75rem; }
+  .map-card { max-height: none; }
+  .map-card iframe { position: relative; height: 300px; }
+  .map-card__bar { position: static; border-radius: 0; box-shadow: none; }
+  .fab-whatsapp { width: 52px; height: 52px; }
+}
+
+/* ≥768px — tablets */
+@media (min-width: 768px) {
+  .bk-card--split { grid-template-columns: 1fr 1fr; gap: 0; }
+  .bk-card--split .cal { padding-right: 1.8rem; border-right: 1px solid var(--c-line); }
+  .bk-card--split .slots { padding-left: 1.8rem; }
+  .bk-error { margin-top: 1rem; }
+
+  /* Experience: feature card side-by-side, steps as a horizontal journey */
+  .xp-feature { grid-template-columns: 1fr 1.15fr; }
+  .xp-feature__media { min-height: 100%; }
+  .xp-feature__body { padding: 2.6rem 2.4rem; }
+  .xp-feature__meta { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem 1.4rem; }
+  .xp-steps { grid-template-columns: repeat(2, 1fr); padding: 0; }
+  .xp-steps::before { display: none; }
+  .xp-step { padding: 2.4rem 1.4rem 1.5rem; margin-top: 1.4rem; }
+  .xp-step__node { left: 1.4rem; top: -23px; }
+}
+
+/* < 992px — stacking */
+@media (max-width: 991.98px) {
+  /* Hero on phones/tablets: portrait first, then the text card */
+  .hero__shell { display: flex; flex-direction: column; padding-top: 1.2rem; padding-bottom: 1.5rem; }
+  .hero__stage { order: -1; }
+  .hero__doctor { -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent); mask-image: linear-gradient(180deg, #000 78%, transparent); }
+  .hero__left { margin-top: -1rem; }
+  .hero__note { display: none; }
+  .hero__card { margin-inline: auto; }
+  .section-head__aside { margin-top: 1rem; }
+  .why__slider-wrap { max-width: 560px; margin-inline: auto; }
+}
+
+/* ≥992px — laptops */
+@media (min-width: 992px) {
+  /* Hero: reference composition — card left, cut-out centre, chips right */
+  .hero__shell { min-height: 640px; padding: 0; }
+  .hero__left { position: absolute; left: 4.5%; top: 9%; width: 40%; }
+  .hero__tag { margin-bottom: 4.2rem; }
+  .hero__doodle { display: block; position: absolute; left: 62%; top: .8rem; width: 120px; }
+  .hero__card { padding: 2.4rem 2.2rem 2rem; }
+  .hero__stage { position: absolute; inset: 0; margin: 0; }
+  .hero__doctor { position: absolute; left: 31%; bottom: 0; width: auto; height: 94%; max-width: none; margin: 0; }
+  .hero-chip--exp { top: 32%; left: 68%; right: auto; }
+  .hero-chip--doc { top: 52%; left: 70%; right: auto; width: 150px; }
+  .hero__note { position: absolute; right: 2.4%; bottom: 7%; max-width: 270px; margin: 0; text-align: left; }
+  .bento { grid-template-columns: 1.5fr 1fr 1fr; grid-auto-rows: 260px; }
+  .bento__item--lg { grid-column: auto; grid-row: span 2; min-height: 0; }
+  .bento__item--cta { grid-column: span 2; flex-direction: row; align-items: center; }
+  .bento__item--cta ul { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; margin: 0; }
+  .summary-wrap { position: sticky; top: 100px; }
+  .footer__cta { flex-direction: row; align-items: center; justify-content: space-between; }
+  .contact__cards { grid-template-columns: 1fr; }
+  .c-card--cta { grid-column: auto; }
+  .map-card { max-height: none; }
+
+  /* FAQ intro stays vertically centred in the viewport while the answers scroll */
+  .faq__intro { position: sticky; top: calc(50vh - 150px); }
+
+  .xp-steps { grid-template-columns: repeat(5, 1fr); gap: 1rem; position: relative; }
+  .xp-steps::before { display: block; left: 2.5rem; right: 2.5rem; top: 1.4rem; bottom: auto; width: auto; height: 2px; background: repeating-linear-gradient(90deg, var(--c-secondary) 0 6px, transparent 6px 12px); }
+  .xp-step { margin-top: 1.4rem; }
+
+  .fab-whatsapp { left: auto; right: 1.25rem; bottom: 5.4rem; }
+  .to-top { right: 1.5rem; bottom: 1.25rem; }
+}
+
+/* ≥1200px — desktops */
+@media (min-width: 1200px) {
+  .site-header .container { gap: 1rem; }
+  .nav-desktop .nav-link { padding: .5rem .65rem !important; }
+  .nav-desktop .nav-link::after { left: .65rem; right: .65rem; }
+  .hero__shell { min-height: 660px; }
+}
+
+/* Very wide screens */
+@media (min-width: 1400px) {
+  .nav-desktop .nav-link { padding: .5rem 1rem !important; }
+  .nav-desktop .nav-link::after { left: 1rem; right: 1rem; }
+}
+
+/* Phones: let the gallery filter row scroll edge-to-edge (after the <768 rules so it wins) */
+@media (max-width: 575.98px) {
+  .section-head .filters { margin-inline: -1.25rem; padding-inline: 1.25rem; }
+}
