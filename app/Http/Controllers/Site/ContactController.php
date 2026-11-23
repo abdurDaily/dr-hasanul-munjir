@@ -31,7 +31,8 @@ class ContactController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        return redirect()->to(url()->previous().'#contactForm')
+        // Fixed internal target (the form only lives on the homepage) — never trust the Referer for redirects
+        return redirect()->to(route('home').'#contactForm')
             ->with('contact_status', 'Thank you — we have received your message and will get back to you soon.');
     }
 }

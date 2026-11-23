@@ -55,6 +55,31 @@ class ContentManagementTest extends TestCase
         $this->get(route('treatments.show', 'whitening'))->assertNotFound();
     }
 
+    public function test_trashed_treatments_and_posts_can_be_restored(): void
+    {
+        $this->post(route('admin.treatments.store'), $this->treatmentData());
+        $t = Treatment::sole();
+        $this->delete(route('admin.treatments.destroy', $t));
+
+        $this->get(route('admin.treatments.index', ['trashed' => 1]))->assertOk()->assertSee('Teeth Whitening')->assertSee('Restore');
+        $this->patch(route('admin.treatments.restore', $t->id))->assertRedirect(route('admin.treatments.edit', $t));
+        $this->assertNotSoftDeleted($t);
+        $this->get(route('treatments.show', $t->slug))->assertOk();
+
+        $this->post(route('admin.posts.store'), ['title' => 'Old news', 'body' => '<p>x</p>', 'status' => 'draft', 'image' => UploadedFile::fake()->image('p.jpg', 800, 600)]);
+        $post = BlogPost::sole();
+        $this->delete(route('admin.posts.destroy', $post));
+        $this->patch(route('admin.posts.restore', $post->id));
+        $this->assertNotSoftDeleted($post);
+
+        // Permanent delete only works from Trash, and removes the image files
+        $this->delete(route('admin.posts.force-destroy', $post->id))->assertNotFound();
+        $this->delete(route('admin.posts.destroy', $post));
+        $this->delete(route('admin.posts.force-destroy', $post->id))->assertSessionHas('success');
+        $this->assertDatabaseMissing('blog_posts', ['id' => $post->id]);
+        Storage::disk('public')->assertMissing("{$post->image}-700.webp");
+    }
+
     public function test_image_uploads_are_validated(): void
     {
         $this->post(route('admin.treatments.store'), $this->treatmentData(['image' => UploadedFile::fake()->create('cv.pdf', 100, 'application/pdf')]))

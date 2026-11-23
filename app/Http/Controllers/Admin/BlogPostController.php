@@ -26,13 +26,37 @@ class BlogPostController extends Controller
     public function index(Request $request): View
     {
         $posts = BlogPost::query()
+            ->when($request->boolean('trashed'), fn ($q) => $q->onlyTrashed())
             ->with(['category:id,name', 'author:id,name'])
             ->when($request->query('q'), fn ($q, $term) => $q->where('title', 'like', "%{$term}%"))
             ->when($request->query('status'), fn ($q, $s) => $q->where('status', $s))
             ->when($request->query('category'), fn ($q, $id) => $q->where('blog_category_id', $id))
             ->latest('updated_at')->paginate(20)->withQueryString();
 
-        return view('admin.posts.index', ['posts' => $posts, 'categories' => BlogCategory::query()->orderBy('name')->pluck('name', 'id')]);
+        return view('admin.posts.index', [
+            'posts' => $posts,
+            'categories' => BlogCategory::query()->orderBy('name')->pluck('name', 'id'),
+            'trashedCount' => BlogPost::onlyTrashed()->count(),
+        ]);
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $post = BlogPost::onlyTrashed()->findOrFail($id);
+        $post->restore();
+        Cache::forget('sitemap.xml');
+
+        return redirect()->route('admin.posts.edit', $post)->with('success', 'Post restored.');
+    }
+
+    /** Permanently removes a trashed post and its images. */
+    public function forceDestroy(int $id): RedirectResponse
+    {
+        $post = BlogPost::onlyTrashed()->findOrFail($id);
+        $this->deleteImages($post, self::IMAGES);
+        $post->forceDelete(); // tag links cascade
+
+        return back()->with('success', 'Post permanently deleted.');
     }
 
     public function create(): View

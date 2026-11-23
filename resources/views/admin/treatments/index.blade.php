@@ -11,7 +11,14 @@
     <input class="form-control" name="q" value="{{ request('q') }}" placeholder="Search treatments" aria-label="Search">
     <select class="form-select" name="category" aria-label="Category" onchange="this.form.submit()"><option value="">All categories</option>@foreach($categories as $id => $name)<option value="{{ $id }}" @selected((int) request('category') === $id)>{{ $name }}</option>@endforeach</select>
   </form>
-  <a href="{{ route('admin.taxonomies.index', 'treatment-categories') }}" class="btn btn-light"><i class="bi bi-tags me-1"></i>Categories</a>
+  <div class="d-flex gap-2">
+    @if(request()->boolean('trashed'))
+      <a href="{{ route('admin.treatments.index') }}" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>All treatments</a>
+    @elseif($trashedCount)
+      <a href="{{ route('admin.treatments.index', ['trashed' => 1]) }}" class="btn btn-light"><i class="bi bi-trash me-1"></i>Trash ({{ $trashedCount }})</a>
+    @endif
+    <a href="{{ route('admin.taxonomies.index', 'treatment-categories') }}" class="btn btn-light"><i class="bi bi-tags me-1"></i>Categories</a>
+  </div>
 </div>
 
 <div class="a-card">
@@ -30,9 +37,13 @@
           <td>{!! $t->is_featured ? '<i class="bi bi-check-circle-fill text-success"></i>' : '<span class="text-muted">—</span>' !!}</td>
           <td><span class="badge {{ $t->is_active ? 'badge-soft-success' : 'badge-soft-secondary' }}">{{ $t->is_active ? 'Active' : 'Hidden' }}</span></td>
           <td class="text-end text-nowrap">
+            @if($t->trashed())
+            <form method="post" action="{{ route('admin.treatments.restore', $t->id) }}" class="d-inline">@csrf @method('PATCH')<button class="btn btn-sm btn-soft"><i class="bi bi-arrow-counterclockwise me-1"></i>Restore</button></form>
+            @else
             @if($t->is_active)<a href="{{ route('treatments.show', $t->slug) }}" target="_blank" rel="noopener" class="btn btn-sm btn-light" aria-label="View on website" data-bs-toggle="tooltip" title="View"><i class="bi bi-box-arrow-up-right"></i></a>@endif
             <a href="{{ route('admin.treatments.edit', $t) }}" class="btn btn-sm btn-soft">Edit</a>
-            <x-admin.delete-button :action="route('admin.treatments.destroy', $t)" confirm="Delete {{ $t->name }}?" text="It disappears from the website. Past appointments keep their treatment name." />
+            <x-admin.delete-button :action="route('admin.treatments.destroy', $t)" confirm="Delete {{ $t->name }}?" text="It moves to Trash and disappears from the website. Past appointments keep their treatment name." />
+            @endif
           </td>
         </tr>
         @endforeach

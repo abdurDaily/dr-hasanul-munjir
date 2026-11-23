@@ -13,6 +13,11 @@
     <select class="form-select" style="max-width:200px" name="category" aria-label="Category" onchange="this.form.submit()"><option value="">All categories</option>@foreach($categories as $id => $name)<option value="{{ $id }}" @selected((int) request('category') === $id)>{{ $name }}</option>@endforeach</select>
   </form>
   <div class="d-flex gap-2">
+    @if(request()->boolean('trashed'))
+      <a href="{{ route('admin.posts.index') }}" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>All posts</a>
+    @elseif($trashedCount)
+      <a href="{{ route('admin.posts.index', ['trashed' => 1]) }}" class="btn btn-light"><i class="bi bi-trash me-1"></i>Trash ({{ $trashedCount }})</a>
+    @endif
     <a href="{{ route('admin.taxonomies.index', 'blog-categories') }}" class="btn btn-light"><i class="bi bi-folder me-1"></i>Categories</a>
     <a href="{{ route('admin.taxonomies.index', 'blog-tags') }}" class="btn btn-light"><i class="bi bi-tags me-1"></i>Tags</a>
   </div>
@@ -38,9 +43,14 @@
           <td class="text-nowrap">{{ $p->published_at?->format('j M Y') ?? '—' }}</td>
           <td>{{ $p->author?->name ?? '—' }}</td>
           <td class="text-end text-nowrap">
+            @if($p->trashed())
+            <form method="post" action="{{ route('admin.posts.restore', $p->id) }}" class="d-inline">@csrf @method('PATCH')<button class="btn btn-sm btn-soft"><i class="bi bi-arrow-counterclockwise me-1"></i>Restore</button></form>
+            <x-admin.delete-button :action="route('admin.posts.force-destroy', $p->id)" label="Delete permanently" confirm="Permanently delete this post?" text="The post and its images are removed for good. This cannot be undone." />
+            @else
             @if($p->isPublished())<a href="{{ route('blog.show', $p->slug) }}" target="_blank" rel="noopener" class="btn btn-sm btn-light" aria-label="View" data-bs-toggle="tooltip" title="View"><i class="bi bi-box-arrow-up-right"></i></a>@endif
             <a href="{{ route('admin.posts.edit', $p) }}" class="btn btn-sm btn-soft">Edit</a>
-            <x-admin.delete-button :action="route('admin.posts.destroy', $p)" confirm="Delete this post?" />
+            <x-admin.delete-button :action="route('admin.posts.destroy', $p)" confirm="Move this post to Trash?" text="It disappears from the website. You can restore it from Trash." />
+            @endif
           </td>
         </tr>
         @endforeach

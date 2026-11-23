@@ -21,12 +21,26 @@ class TreatmentController extends Controller
     public function index(Request $request): View
     {
         $treatments = Treatment::query()
+            ->when($request->boolean('trashed'), fn ($q) => $q->onlyTrashed())
             ->with('category:id,name')
             ->when($request->query('q'), fn ($q, $term) => $q->where('name', 'like', "%{$term}%"))
             ->when($request->query('category'), fn ($q, $id) => $q->where('treatment_category_id', $id))
             ->ordered()->paginate(20)->withQueryString();
 
-        return view('admin.treatments.index', ['treatments' => $treatments, 'categories' => TreatmentCategory::query()->orderBy('sort_order')->pluck('name', 'id')]);
+        return view('admin.treatments.index', [
+            'treatments' => $treatments,
+            'categories' => TreatmentCategory::query()->orderBy('sort_order')->pluck('name', 'id'),
+            'trashedCount' => Treatment::onlyTrashed()->count(),
+        ]);
+    }
+
+    /** Deleted treatments are kept (past appointments reference them) and can be restored. */
+    public function restore(int $id): RedirectResponse
+    {
+        $treatment = Treatment::onlyTrashed()->findOrFail($id);
+        $treatment->restore();
+
+        return redirect()->route('admin.treatments.edit', $treatment)->with('success', "{$treatment->name} restored — it is visible again if “Show on website” is on.");
     }
 
     public function create(): View

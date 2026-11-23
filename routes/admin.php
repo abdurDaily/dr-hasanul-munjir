@@ -54,9 +54,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // ---- Content ----
     Route::middleware('can:treatments.manage')->group(function () {
+        Route::patch('treatments/{id}/restore', [Admin\TreatmentController::class, 'restore'])->name('treatments.restore');
         Route::resource('treatments', Admin\TreatmentController::class)->except('show');
     });
     Route::middleware('can:blog.manage')->group(function () {
+        Route::patch('posts/{id}/restore', [Admin\BlogPostController::class, 'restore'])->name('posts.restore');
+        Route::delete('posts/{id}/force', [Admin\BlogPostController::class, 'forceDestroy'])->name('posts.force-destroy');
         Route::resource('posts', Admin\BlogPostController::class)->except('show');
     });
     Route::middleware('can:testimonials.manage')->group(function () {
