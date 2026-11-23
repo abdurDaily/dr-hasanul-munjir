@@ -60,7 +60,15 @@
 
     <div class="footer__bottom">
       <p class="mb-0">© {{ now()->year }} {{ $profile->full_name }} · {{ $site->get('clinic_name') }}@if($profile->bmdc_reg_no) · BMDC Reg. No. {{ $profile->bmdc_reg_no }}@endif</p>
-      <div class="d-flex gap-4"><a href="{{ route('pages.privacy') }}">Privacy Policy</a><a href="{{ route('pages.terms') }}">Terms of Use</a></div>
+      <div class="d-flex flex-wrap gap-4">
+        <a href="{{ route('pages.privacy') }}">Privacy Policy</a><a href="{{ route('pages.terms') }}">Terms of Use</a>
+        {{-- Entry point for the doctor & staff; signed-in staff go straight to the dashboard --}}
+        @auth
+          <a href="{{ route('admin.dashboard') }}" rel="nofollow"><i class="bi bi-grid"></i> Dashboard</a>
+        @else
+          <a href="{{ route('admin.login') }}" rel="nofollow"><i class="bi bi-lock"></i> Staff Login</a>
+        @endauth
+      </div>
     </div>
   </div>
 </footer>

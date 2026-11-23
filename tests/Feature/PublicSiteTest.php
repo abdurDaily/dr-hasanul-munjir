@@ -71,6 +71,12 @@ class PublicSiteTest extends TestCase
         $this->assertSame(1, NewsletterSubscriber::count());
     }
 
+    public function test_footer_links_staff_to_login_or_dashboard(): void
+    {
+        $this->get('/')->assertSee(route('admin.login'))->assertSee('Staff Login');
+        $this->actingAs($this->staff())->get('/')->assertSee(route('admin.dashboard'))->assertDontSee('Staff Login');
+    }
+
     public function test_admin_pages_are_not_cached_or_indexed(): void
     {
         $this->get('/admin/login')->assertHeader('X-Robots-Tag', 'noindex, nofollow')->assertHeader('X-Frame-Options', 'SAMEORIGIN');
