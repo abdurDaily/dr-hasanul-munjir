@@ -9,7 +9,7 @@ from pathlib import Path
 from fontTools import subset
 
 SRC = Path("tools/vendor/fonts")
-OUT = Path("assets/fonts")
+OUT = Path("public/assets/fonts")
 
 # Basic Latin + Latin-1 + the typographic punctuation used in the copy
 UNICODES = "U+0020-007E,U+00A0-00FF,U+2013-2014,U+2018-201F,U+2022,U+2026,U+2122,U+2192"

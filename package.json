@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "scripts": {
+        "build:css": "node tools/purge-css.cjs && node tools/build-css.cjs",
+        "build:admin": "node tools/build-admin.cjs"
+    },
+    "devDependencies": {
+        "bootstrap": "5.3",
+        "csso": "^5.0.5",
+        "purgecss": "^6.0.0",
+        "quill": "^2.0.3",
+        "sweetalert2": "^11.26.25"
+    }
+}

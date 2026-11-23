@@ -1,10 +1,27 @@
-# Raw client uploads & design references — the site uses optimised copies in assets/images
+# Raw client uploads & design references — the site uses optimised copies in public/assets/images
 /images/
+/admin_dasboard_template.jfif
+
+# Laravel
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+/auth.json
 
 # OS / editor files
 .DS_Store
 Thumbs.db
 .vscode/
+/.idea
 
 # Unused since the hero redesign (kept locally only)
-/assets/videos/
+/public/assets/videos/

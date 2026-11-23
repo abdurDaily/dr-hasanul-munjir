@@ -1,13 +1,14 @@
 """Generate responsive WebP versions of the site's local images.
 
 Run from the project root:  python tools/optimize_images.py
-Re-run whenever a source photo in assets/images is replaced.
+Legacy: the Laravel app makes responsive WebP for uploads itself (App\Services\ImageService).
+Only needed for the static fallback images in public/assets/images.
 Output files are written next to the source as <name>-<width>.webp.
 """
 from pathlib import Path
 from PIL import Image
 
-IMG = Path("assets/images")
+IMG = Path("public/assets/images")
 
 # source file -> widths to generate (largest first)
 JOBS = {

@@ -1,0 +1,1 @@
+<span class="g-stars" role="img" aria-label="{{ rtrim(rtrim(number_format($rating, 1), '0'), '.') }} out of 5 stars">@for($i = 1; $i <= 5; $i++)<i class="bi {{ $rating >= $i ? 'bi-star-fill' : ($rating >= $i - 0.5 ? 'bi-star-half' : 'bi-star') }}"></i>@endfor</span>
