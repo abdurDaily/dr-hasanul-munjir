@@ -31,7 +31,7 @@ class TreatmentController extends Controller
 
     public function show(string $slug, Seo $seo): View
     {
-        $treatment = Treatment::query()->active()->where('slug', $slug)->with('category:id,name')->firstOrFail();
+        $treatment = Treatment::query()->active()->where('slug', $slug)->with(['category:id,name', 'images'])->firstOrFail();
         // Same category first, then the usual display order
         $related = Treatment::query()->active()->whereKeyNot($treatment->id)
             ->orderByRaw('treatment_category_id <=> ? desc', [$treatment->treatment_category_id])

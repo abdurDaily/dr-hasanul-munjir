@@ -26,6 +26,23 @@
             <p>Every treatment starts with a careful examination and an honest explanation of your options. Book a visit and {{ $profile->full_name }} will recommend what is right for your teeth.</p>
           @endif
         </div>
+
+        @if($treatment->images->isNotEmpty())
+        <div class="treat-gallery">
+          <h2 class="treat-gallery__title">Gallery</h2>
+          <div class="treat-gallery__grid">
+            @foreach($treatment->images as $img)
+            <figure class="treat-gallery__item">
+              <button type="button" class="treat-gallery__btn" data-lightbox="{{ image_url($img->image, 'photo', 1400) }}" data-caption="{{ $img->caption ?: $treatment->name }}" aria-label="Enlarge image{{ $img->caption ? ': '.$img->caption : '' }}">
+                <x-picture :path="$img->image" preset="photo" :alt="$img->alt ?: $treatment->name" sizes="(min-width: 992px) 340px, (min-width: 576px) 45vw, 92vw" :width="600" />
+                <span class="treat-gallery__zoom" aria-hidden="true"><i class="bi bi-arrows-angle-expand"></i></span>
+              </button>
+              @if($img->caption)<figcaption>{{ $img->caption }}</figcaption>@endif
+            </figure>
+            @endforeach
+          </div>
+        </div>
+        @endif
       </div>
       <div class="col-lg-5">
         <aside class="treatment-facts">
@@ -44,6 +61,8 @@
     </div>
   </div>
 </section>
+
+@if($treatment->images->isNotEmpty())@include('site.partials.lightbox')@endif
 
 @include('site.partials.booking', ['selectedTreatment' => $treatment])
 

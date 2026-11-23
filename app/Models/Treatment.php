@@ -34,6 +34,11 @@ class Treatment extends Model
         return $this->hasMany(Appointment::class);
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(TreatmentImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
     public function smileCases(): HasMany
     {
         return $this->hasMany(SmileCase::class);

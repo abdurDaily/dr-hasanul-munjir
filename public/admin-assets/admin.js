@@ -60,6 +60,31 @@
     });
   });
 
+  /* ---------- Multi-image upload preview (e.g. treatment gallery) ---------- */
+  document.querySelectorAll('input[type="file"][data-preview-list]').forEach((input) => {
+    const list = document.querySelector(input.dataset.previewList);
+    input.addEventListener('change', () => {
+      const maxKb = +input.dataset.maxKb || 5120;
+      const maxFiles = +input.dataset.maxFiles || 12;
+      const files = [...input.files];
+      const bad = files.find((f) => !/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > maxKb * 1024);
+      if (bad || files.length > maxFiles) {
+        input.value = '';
+        list.replaceChildren();
+        Toast.fire({ icon: 'error', title: bad ? `“${bad.name}” is not a JPG/PNG/WebP under ${Math.round(maxKb / 1024)} MB.` : `Please choose at most ${maxFiles} images at a time.` });
+        return;
+      }
+      list.replaceChildren(...files.map((f) => Object.assign(document.createElement('img'), {
+        src: URL.createObjectURL(f), alt: '', className: 'thumb thumb--lg', title: f.name,
+      })));
+    });
+  });
+
+  // Fade gallery items marked for removal
+  document.querySelectorAll('.js-gallery-delete').forEach((box) => box.addEventListener('change', () => {
+    box.closest('.gallery-item').style.opacity = box.checked ? '.4' : '';
+  }));
+
   /* ---------- Slug from title ---------- */
   document.querySelectorAll('[data-slug-from]').forEach((slug) => {
     const src = document.querySelector(slug.dataset.slugFrom);

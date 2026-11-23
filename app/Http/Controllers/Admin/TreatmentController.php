@@ -6,10 +6,14 @@ use App\Http\Controllers\Admin\Concerns\SavesImages;
 use App\Http\Controllers\Controller;
 use App\Models\Treatment;
 use App\Models\TreatmentCategory;
+use App\Models\TreatmentImage;
 use App\Services\HtmlCleaner;
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TreatmentController extends Controller
@@ -50,7 +54,13 @@ class TreatmentController extends Controller
 
     public function store(Request $request, HtmlCleaner $cleaner): RedirectResponse
     {
-        $treatment = Treatment::create($this->data($request, $cleaner));
+        $data = $this->data($request, $cleaner);
+        $treatment = DB::transaction(function () use ($request, $data) {
+            $treatment = Treatment::create($data);
+            $this->syncGallery($request, $treatment);
+
+            return $treatment;
+        });
 
         return redirect()->route('admin.treatments.edit', $treatment)->with('success', 'Treatment created.');
     }
@@ -62,7 +72,11 @@ class TreatmentController extends Controller
 
     public function update(Request $request, Treatment $treatment, HtmlCleaner $cleaner): RedirectResponse
     {
-        $treatment->update($this->data($request, $cleaner, $treatment));
+        $data = $this->data($request, $cleaner, $treatment);
+        DB::transaction(function () use ($request, $treatment, $data) {
+            $treatment->update($data);
+            $this->syncGallery($request, $treatment);
+        });
 
         return back()->with('success', 'Treatment saved.');
     }
@@ -76,7 +90,11 @@ class TreatmentController extends Controller
 
     private function form(Treatment $treatment): View
     {
-        return view('admin.treatments.form', ['treatment' => $treatment, 'categories' => TreatmentCategory::query()->orderBy('sort_order')->pluck('name', 'id')]);
+        return view('admin.treatments.form', [
+            'treatment' => $treatment,
+            'gallery' => $treatment->exists ? $treatment->images()->get() : collect(),
+            'categories' => TreatmentCategory::query()->orderBy('sort_order')->pluck('name', 'id'),
+        ]);
     }
 
     private function data(Request $request, HtmlCleaner $cleaner, ?Treatment $treatment = null): array
@@ -97,9 +115,62 @@ class TreatmentController extends Controller
             'is_active' => ['boolean'],
             'seo_title' => ['nullable', 'string', 'max:70'],
             'seo_description' => ['nullable', 'string', 'max:320'],
+            // Detail-page gallery: new uploads + edits to existing images
+            'gallery_new' => ['nullable', 'array', 'max:'.TreatmentImage::MAX_PER_UPLOAD],
+            'gallery_new.*' => self::imageRule(true),
+            'gallery' => ['nullable', 'array'],
+            'gallery.*.caption' => ['nullable', 'string', 'max:160'],
+            'gallery.*.alt' => ['nullable', 'string', 'max:255'],
+            'gallery.*.sort_order' => ['nullable', 'integer', 'min:0'],
+            'gallery.*.delete' => ['nullable', 'boolean'],
+        ], [
+            'gallery_new.max' => 'You can upload up to '.TreatmentImage::MAX_PER_UPLOAD.' images at a time.',
+            'gallery_new.*.image' => 'Each gallery file must be a JPG, PNG or WebP image.',
+            'gallery_new.*.mimes' => 'Each gallery file must be a JPG, PNG or WebP image.',
+            'gallery_new.*.max' => 'Each gallery image must be under '.round(config('images.max_upload_kb') / 1024).' MB.',
         ]);
+
+        $kept = $treatment ? $treatment->images()->count() - collect($data['gallery'] ?? [])->filter(fn ($g) => ! empty($g['delete']))->count() : 0;
+        if ($kept + count($data['gallery_new'] ?? []) > TreatmentImage::MAX_PER_TREATMENT) {
+            throw ValidationException::withMessages(['gallery_new' => 'A treatment can have at most '.TreatmentImage::MAX_PER_TREATMENT.' gallery images.']);
+        }
+        unset($data['gallery_new'], $data['gallery']);
         $data['description'] = $cleaner->clean($data['description'] ?? null);
 
         return $this->withImages($request, $data, self::IMAGES, $treatment);
+    }
+
+    /** Applies caption/order edits and deletions to existing gallery images, then stores new uploads. */
+    private function syncGallery(Request $request, Treatment $treatment): void
+    {
+        $images = app(ImageService::class);
+        $existing = $treatment->images()->get()->keyBy('id');
+
+        foreach ((array) $request->input('gallery', []) as $id => $fields) {
+            $image = $existing->get((int) $id); // only this treatment's images can be touched
+            if (! $image) {
+                continue;
+            }
+            if (! empty($fields['delete'])) {
+                $images->delete($image->image, 'photo');
+                $image->delete();
+
+                continue;
+            }
+            $image->update([
+                'caption' => $fields['caption'] ?? null,
+                'alt' => $fields['alt'] ?? null,
+                'sort_order' => (int) ($fields['sort_order'] ?? $image->sort_order),
+            ]);
+        }
+
+        $next = (int) $treatment->images()->max('sort_order') + 1;
+        foreach ($request->file('gallery_new', []) as $file) {
+            $treatment->images()->create([
+                'image' => $images->store($file, 'treatments/gallery', 'photo'),
+                'alt' => $treatment->name,
+                'sort_order' => $next++,
+            ]);
+        }
     }
 }

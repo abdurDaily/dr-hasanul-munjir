@@ -55,6 +55,65 @@ class ContentManagementTest extends TestCase
         $this->get(route('treatments.show', 'whitening'))->assertNotFound();
     }
 
+    public function test_treatment_gallery_images_can_be_added_captioned_and_removed(): void
+    {
+        $this->post(route('admin.treatments.store'), $this->treatmentData([
+            'gallery_new' => [UploadedFile::fake()->image('stage1.jpg', 1200, 900), UploadedFile::fake()->image('stage2.png', 1000, 750)],
+        ]))->assertSessionHasNoErrors();
+
+        $t = Treatment::sole();
+        [$first, $second] = $t->images()->get()->all();
+        foreach ([600, 900, 1400] as $w) {
+            Storage::disk('public')->assertExists("{$first->image}-{$w}.webp");
+        }
+
+        // Caption + reorder one, remove the other, add a third
+        $this->put(route('admin.treatments.update', $t), $this->treatmentData([
+            'image' => null,
+            'gallery' => [
+                $first->id => ['caption' => 'Early gum inflammation', 'alt' => 'Red, swollen gums', 'sort_order' => 5],
+                $second->id => ['caption' => '', 'delete' => 1],
+            ],
+            'gallery_new' => [UploadedFile::fake()->image('stage3.jpg', 900, 700)],
+        ]))->assertSessionHas('success');
+
+        $images = $t->images()->get();
+        $this->assertCount(2, $images);
+        $this->assertSame('Early gum inflammation', $images->firstWhere('id', $first->id)->caption);
+        $this->assertSame([$first->id, $images->last()->id], $images->pluck('id')->all());
+        $this->assertGreaterThan(5, $images->last()->sort_order); // new uploads go after existing ones
+        $this->assertDatabaseMissing('treatment_images', ['id' => $second->id]);
+        Storage::disk('public')->assertMissing("{$second->image}-600.webp");
+
+        // Shown on the public page with an enlarge button
+        $this->get(route('treatments.show', $t->slug))->assertOk()
+            ->assertSee('Early gum inflammation')->assertSee('id="lightbox"', false)->assertSee('data-lightbox=', false);
+    }
+
+    public function test_gallery_rejects_bad_files_and_other_treatments_images(): void
+    {
+        $this->post(route('admin.treatments.store'), $this->treatmentData([
+            'gallery_new' => [UploadedFile::fake()->create('notes.pdf', 50, 'application/pdf')],
+        ]))->assertSessionHasErrors('gallery_new.0');
+        $this->assertSame(0, Treatment::count());
+
+        $this->post(route('admin.treatments.store'), $this->treatmentData(['gallery_new' => [UploadedFile::fake()->image('a.jpg', 800, 600)]]));
+        $this->post(route('admin.treatments.store'), $this->treatmentData(['name' => 'Implants', 'slug' => 'implants']));
+        [$a, $b] = Treatment::query()->orderBy('id')->get()->all();
+        $foreign = $a->images()->sole();
+
+        // Editing treatment B cannot delete treatment A's image
+        $this->put(route('admin.treatments.update', $b), $this->treatmentData(['name' => 'Implants', 'slug' => 'implants', 'image' => null, 'gallery' => [$foreign->id => ['delete' => 1]]]));
+        $this->assertDatabaseHas('treatment_images', ['id' => $foreign->id]);
+    }
+
+    public function test_treatment_cards_link_to_the_detail_page(): void
+    {
+        $this->post(route('admin.treatments.store'), $this->treatmentData());
+
+        $this->get('/')->assertSee('View details')->assertSee(route('treatments.show', 'teeth-whitening'));
+    }
+
     public function test_trashed_treatments_and_posts_can_be_restored(): void
     {
         $this->post(route('admin.treatments.store'), $this->treatmentData());
